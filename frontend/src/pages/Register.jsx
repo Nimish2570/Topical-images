@@ -36,7 +36,9 @@ const Register = () => {
       if (response.data.access) {
         localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);
         localStorage.setItem(REFRESH_TOKEN, response.data.refreshToken);
-        navigate('/');
+        // reload the page
+        window.location.reload();
+        
       }
     } catch (error) {
       
