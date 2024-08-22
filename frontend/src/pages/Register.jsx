@@ -66,6 +66,8 @@ const Register = () => {
           <input type="password" id="password" placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)} required />
 
           <button type="submit">Register</button>
+          {error && <p className="error">{error}</p>}
+          {loading && <p>Loading...</p>}
           
           <p>Already have an account?</p>
           <a href="/login" className="login-link">
