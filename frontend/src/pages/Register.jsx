@@ -41,9 +41,15 @@ const Register = () => {
         
       }
     } catch (error) {
-      
-      setError(error.response.data.message);
-      
+      if (error.response.status === 400) {
+        setError(error.response.data.detail);
+      }
+      if (error.response.data.username){
+        setError(error.response.data.username);
+      }
+      if (error.response.data.email){
+        setError(error.response.data.email);
+      }
     } finally {
       setLoading(false);
     }
