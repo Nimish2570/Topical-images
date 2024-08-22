@@ -110,7 +110,9 @@ def overlay_images(background_img, logo_img, frame_img, title):
 
 
     # Load bold font
-    title_font = ImageFont.truetype("arialbd.ttf", 60)
+    font_path = finders.find('fonts/MADEOkineSansPERSONALUSE-Bold.otf')
+    title_font = ImageFont.truetype(font_path, 60)
+    
 
     # Capitalize the title text
     title_text = title.upper()
