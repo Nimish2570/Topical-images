@@ -154,6 +154,11 @@ def overlay_images(background_img, logo_img, frame_img, title):
     start_y = image_height - total_text_height - 10
     if len(lines) == 1:
         start_y = image_height - total_text_height - 100
+    if len(lines) == 2:
+        start_y = image_height - total_text_height - 50
+    if len(lines) == 3:
+        start_y = image_height - total_text_height - 30
+        
     
 
     
