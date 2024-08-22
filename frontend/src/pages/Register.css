@@ -10,7 +10,10 @@ body {
     align-items: center;
     min-height: 100vh;
   }
-  
+  .error{
+    color: red;
+    font-size: 0.8rem;
+  }
   
   .register-form {
     background-color: #f3f4f6;
