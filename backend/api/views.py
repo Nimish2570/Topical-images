@@ -39,6 +39,8 @@ def overlay_images(background_img, logo_img, frame_img, title):
     background = Image.open(background_img)
     background_width, background_height = background.size
     background = background.resize((1640, 820)).convert('RGBA')  
+    logoProvided = True if logo_img else False
+
     
     if frame_img:
         frame = Image.open(frame_img).resize((1640, 820)).convert('RGBA')
@@ -103,9 +105,11 @@ def overlay_images(background_img, logo_img, frame_img, title):
     rect_width = logo.width + 20
     cloud_img = create_fading_oval_cloud(cloud_size, rect_height , rect_width, fade_radius)
     cloud_img.paste(logo, (10, 10), logo)
-    combined_img.paste(cloud_img, (0,0), cloud_img)
+    if logoProvided:
+        combined_img.paste(cloud_img, (0,0), cloud_img)
 
     # Paste the frame image
+
     combined_img.paste(frame, (0, 0), frame)
 
 
