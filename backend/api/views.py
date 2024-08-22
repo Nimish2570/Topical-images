@@ -152,6 +152,11 @@ def overlay_images(background_img, logo_img, frame_img, title):
 
     # Calculate the starting y-coordinate for the text (centered vertically from the bottom)
     start_y = image_height - total_text_height - 10
+    if len(lines) == 1:
+        start_y = image_height - total_text_height - 100
+    
+
+    
 
     # Draw each line of text with line spacing
     for line in lines:
