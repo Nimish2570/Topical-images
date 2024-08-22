@@ -33,7 +33,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = [
-    "*"
+    "http://localhost:5173",
+    "https://h4wwc400c4gk4gg8g8ckco4o.desync-game.com"
+    
 ]
 
 REST_FRAMEWORK = {
