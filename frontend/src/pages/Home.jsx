@@ -20,8 +20,11 @@ const Home = () => {
       setImage(file);
     }
   };
+  if (!localStorage.getItem(ACCESS_TOKEN)) {
+    return <Navigate to="/login" />;
+  }
 
-  
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
