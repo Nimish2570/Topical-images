@@ -110,50 +110,7 @@ def overlay_images(background_img, logo_img, frame_img, title):
 
 
     # Load bold font
-    title_font = ImageFont.truetype("arialbd.ttf", 60)
-
-    # Capitalize the title text
-    title_text = title.upper()
-
-    # Set color and image dimensions
-    title_color = (255, 255, 255)
-    image_width = 1640
-    image_height = 820
-
-    # Set line spacing
-    line_spacing = 20  # Adjust this value as needed
-
-    # Initialize the draw object
-    title_draw = ImageDraw.Draw(combined_img)
-
-    # Estimate the maximum number of characters per line based on the image width
-    max_char_per_line = int(image_width / title_font.getlength('A'))
-
-    # Wrap the text
-    wrapped_text = textwrap.fill(title_text, width=max_char_per_line)
-
-    # Split wrapped text into individual lines
-    lines = wrapped_text.split('\n')
-    # add 1 blank line at the end
-    lines.append('')
-
-    # Calculate the total height needed for the text with line spacing
-    total_text_height = sum(
-        title_draw.textbbox((0, 0), line, font=title_font)[3] - title_draw.textbbox((0, 0), line, font=title_font)[1]
-        for line in lines
-    ) + line_spacing * (len(lines) - 1)
-
-    # Calculate the starting y-coordinate for the text (centered vertically from the bottom)
-    start_y = image_height - total_text_height - 10
-
-    # Draw each line of text with line spacing
-    for line in lines:
-        text_bbox = title_draw.textbbox((0, 0), line, font=title_font)
-        text_width = text_bbox[2] - text_bbox[0]
-        text_height = text_bbox[3] - text_bbox[1]
-        x_position = (image_width - text_width) / 2
-        title_draw.text((x_position, start_y), line, font=title_font, fill=title_color)
-        start_y += text_height + line_spacing  # Move down for the next line with spacing
+    
 
     return combined_img.convert('RGB')
     # Convert to RGB if needed for JPEG
