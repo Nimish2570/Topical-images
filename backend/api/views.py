@@ -142,7 +142,7 @@ def overlay_images(background_img, logo_img, frame_img, title):
     # Split wrapped text into individual lines
     lines = wrapped_text.split('\n')
     # add 1 blank line at the end
-    lines.append('')
+   
 
     # Calculate the total height needed for the text with line spacing
     total_text_height = sum(
@@ -151,8 +151,8 @@ def overlay_images(background_img, logo_img, frame_img, title):
     ) + line_spacing * (len(lines) - 1)
 
     # Define the text area dimensions
-    text_area_width = 1300
-    text_area_height = 280
+    text_area_width = 1580
+    text_area_height = 200
 
     # Calculate the starting x and y coordinates for the text area
     start_x = (image_width - text_area_width) / 2
