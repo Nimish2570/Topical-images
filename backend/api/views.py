@@ -115,7 +115,7 @@ def overlay_images(background_img, logo_img, frame_img, title):
 
     # Load bold font
     font_path = finders.find('fonts/MADEOkineSansPERSONALUSE-Bold.otf')
-    font_size = 50
+    font_size = 60
     title_font = ImageFont.truetype(font_path, font_size)
    
 
@@ -151,8 +151,8 @@ def overlay_images(background_img, logo_img, frame_img, title):
     ) + line_spacing * (len(lines) - 1)
 
     # Define the text area dimensions
-    text_area_width = 1240
-    text_area_height = 320
+    text_area_width = 1300
+    text_area_height = 280
 
     # Calculate the starting x and y coordinates for the text area
     start_x = (image_width - text_area_width) / 2
