@@ -37,7 +37,7 @@ const Home = () => {
     if (logoImage) formData.append('logo_image', logoImage);
 
     try {
-      const response = await axios.post('http://localhost:8000/generateImage/', formData, {
+      const response = await api.post('/generateImage/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
