@@ -112,6 +112,10 @@ DATABASES = {
         'PASSWORD':'01Lv1nQLpQYwqmHgYIQPxNSyislg5ICkDHmAR41GoqK6lBwFSqaKP4G2bQepmVcN',
         'HOST': 'okco0gokwc8400wowk00c0gk',
         'PORT': '5432',
+
+        # # sqlite3 database
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
