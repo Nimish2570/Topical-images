@@ -11,3 +11,4 @@ python-dotenv
 pillow
 numpy
 opencv-python-headless
+gunicorn
