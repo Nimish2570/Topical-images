@@ -33,7 +33,7 @@ const Register = () => {
       });
       console.log(response.data);
 
-      if (response.data.access) {
+      if (response.data) {
         localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);
         localStorage.setItem(REFRESH_TOKEN, response.data.refreshToken);
         // reload the page
