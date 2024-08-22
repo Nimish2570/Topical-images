@@ -42,7 +42,7 @@ const Register = () => {
       }
     } catch (error) {
       
-      setError('Invalid username or password');
+      setError(error.response.data.message);
       
     } finally {
       setLoading(false);
