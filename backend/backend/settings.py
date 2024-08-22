@@ -110,7 +110,7 @@ DATABASES = {
         'NAME': 'postgresql-database',
         'USER': 'postgres',
         'PASSWORD': '01Lv1nQLpQYwqmHgYIQPxNSyislg5ICkDHmAR41GoqK6lBwFSqaKP4G2bQepmVcN',
-        'HOST': 'h4wwc400c4gk4gg8g8ckco4o-004642431437',
+        'HOST': 'h4wwc400c4gk4gg8g8ckco4o',
         'PORT': '5432',
     }
 }
