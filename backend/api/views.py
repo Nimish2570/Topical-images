@@ -148,22 +148,15 @@ def overlay_images(background_img, logo_img, frame_img, title):
 
     # Calculate the starting y-coordinate for the text (centered vertically from the bottom)
     start_y = image_height - total_text_height - 10
-    # create a transparent rectangle to hold the text
-    title_draw.rectangle([0, start_y, image_width, image_height], fill=(0, 0 , 0, 0))
 
     # Draw each line of text with line spacing
     for line in lines:
-        bbox = title_draw.textbbox((0, 0), line, font=title_font)
-        width = bbox[2] - bbox[0]
-        height = bbox[3] - bbox[1]
-        title_draw.text(((image_width - width) / 2, start_y), line, font=title_font, fill=title_color)
-        start_y += height + line_spacing
-    
-    # resize the title image to 1440x320
-    title_img = combined_img.crop((0, 500, 1640, 820))
-    title_img = title_img.resize((1440, 320))
-    combined_img.paste(title_img, (0, 500))
-    
+        text_bbox = title_draw.textbbox((0, 0), line, font=title_font)
+        text_width = text_bbox[2] - text_bbox[0]
+        text_height = text_bbox[3] - text_bbox[1]
+        x_position = (image_width - text_width) / 2
+        title_draw.text((x_position, start_y), line, font=title_font, fill=title_color)
+        start_y += text_height + line_spacing  # Move down for the next line with spacing
 
     return combined_img.convert('RGB')
     # Convert to RGB if needed for JPEG
