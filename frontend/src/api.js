@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ACCESS_TOKEN } from "./constants";
 
-const apiUrl = "https://h4wwc400c4gk4gg8g8ckco4o.desync-game.com";
+const apiUrl = "https://r8oo8c8sc8c8kko04s4w0ckw.desync-game.com/";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : apiUrl,
