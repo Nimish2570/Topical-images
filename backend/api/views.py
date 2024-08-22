@@ -153,7 +153,9 @@ def overlay_images(background_img, logo_img, frame_img, title):
 
     # Draw each line of text with line spacing
     for line in lines:
-        width, height = title_draw.textsize(line, font=title_font)
+        bbox = title_draw.textbbox((0, 0), line, font=title_font)
+        width = bbox[2] - bbox[0]
+        height = bbox[3] - bbox[1]
         title_draw.text(((image_width - width) / 2, start_y), line, font=title_font, fill=title_color)
         start_y += height + line_spacing
     
