@@ -150,27 +150,25 @@ def overlay_images(background_img, logo_img, frame_img, title):
         for line in lines
     ) + line_spacing * (len(lines) - 1)
 
-    # Calculate the starting y-coordinate for the text (centered vertically from the bottom)
-    start_y = image_height - total_text_height - 10
-    if len(lines) == 1:
-        start_y = image_height - total_text_height - 100
-    if len(lines) == 2:
-        start_y = image_height - total_text_height - 50
-    if len(lines) == 3:
-        start_y = image_height - total_text_height - 30
-        
-    
+    # Define the text area dimensions
+    text_area_width = 1240
+    text_area_height = 320
 
-    
+    # Calculate the starting x and y coordinates for the text area
+    start_x = (image_width - text_area_width) / 2
+    start_y = image_height - text_area_height - 10
 
-    # Draw each line of text with line spacing
+    # Calculate the vertical position to start drawing the text so it's centered in the text area
+    centered_start_y = start_y + (text_area_height - total_text_height) / 2
+
+    # Draw each line of text within the text area
     for line in lines:
         text_bbox = title_draw.textbbox((0, 0), line, font=title_font)
         text_width = text_bbox[2] - text_bbox[0]
         text_height = text_bbox[3] - text_bbox[1]
-        x_position = (image_width - text_width) / 2
-        title_draw.text((x_position, start_y), line, font=title_font, fill=title_color)
-        start_y += text_height + line_spacing  # Move down for the next line with spacing
+        x_position = start_x + (text_area_width - text_width) / 2
+        title_draw.text((x_position, centered_start_y), line, font=title_font, fill=title_color)
+        centered_start_y += text_height + line_spacing  # Move down for the next line with spacing
 
     return combined_img.convert('RGB')
     # Convert to RGB if needed for JPEG
