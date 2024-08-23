@@ -1,0 +1,44 @@
+/* ImageCard.css */
+.ImageCard {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 10px;
+  text-align: center;
+  background-color: #f9f9f9;
+  position: relative;
+}
+
+.ImageCard img {
+  max-width: 100%;
+  border-radius: 4px;
+}
+
+/* Initially hide the buttons */
+.ImageCard .button-group {
+  display: none;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+/* Show the buttons when hovering over the image card */
+.ImageCard:hover .button-group {
+  display: block;
+}
+
+.ImageCard .button-group button {
+  margin: 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: rgba(98, 0, 234, 0.4); /* 80% transparency */
+  color: white;
+}
+
+.ImageCard .button-group button:hover {
+  background-color: #3700b3;
+}
