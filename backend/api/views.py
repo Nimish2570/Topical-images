@@ -222,6 +222,8 @@ def generateImage(request):
         with open(output_image_path, 'rb') as image_file:
             output_image_data = base64.b64encode(image_file.read()).decode('utf-8')
 
+        current_output_path = "output_image.avif"
+
         if title != "":
             title = title.lower()
             colon_index = title.find(':')
