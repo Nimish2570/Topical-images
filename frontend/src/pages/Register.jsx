@@ -34,8 +34,8 @@ const Register = () => {
       console.log(response.data);
 
       if (response.data) {
-        localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);
-        localStorage.setItem(REFRESH_TOKEN, response.data.refreshToken);
+        localStorage.setItem(ACCESS_TOKEN, response.data.access);
+        localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
         // reload the page
         window.location.reload();
         

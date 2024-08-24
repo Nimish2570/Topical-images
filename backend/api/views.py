@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from rest_framework import generics 
 from .serializers import UserSerializer
+from rest_framework import generics, permissions
+from .models import Profile
+from .serializers import ProfileSerializer
 from rest_framework.permissions import AllowAny
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.staticfiles import finders
@@ -17,6 +19,23 @@ import cv2
 
 
 # Create your views here.
+
+class ProfileRetrieveView(generics.RetrieveAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user.profile
+
+class ProfileUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user.profile
+
 
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -203,7 +222,28 @@ def generateImage(request):
         with open(output_image_path, 'rb') as image_file:
             output_image_data = base64.b64encode(image_file.read()).decode('utf-8')
 
-        return JsonResponse({'output': output_image_url, 'output_image_data': output_image_data, 'title': title, 'list': text_list})
+        if title != "":
+            title = title.lower()
+            colon_index = title.find(':')
+            if colon_index != -1:
+                title = title[:colon_index]
+            else:
+                title = title
+            title = ' '.join(title.split())
+        
+            translation_table = str.maketrans('', '', "!.;?/[]{}()#@^&*")
+
+            # Use translate to remove the specified characters
+            title = title.translate(translation_table)
+            title = title.replace(" ", "_")
+            if len(title) > 20:
+                title = title[:20]
+                
+            title += ".avif"
+            output_path = title
+            current_output_path = output_path
+
+        return JsonResponse({'output': output_image_url, 'output_image_data': output_image_data,'output_image_name':current_output_path})
 
        
     return JsonResponse({'error': 'Invalid request method'}, status=405)

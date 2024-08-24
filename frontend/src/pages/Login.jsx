@@ -27,8 +27,9 @@ const Login = () => {
       console.log(response.data);
 
       if (response.data.access) {
-        localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);
-        localStorage.setItem(REFRESH_TOKEN, response.data.refreshToken);
+        localStorage.setItem(ACCESS_TOKEN, response.data.access);
+       
+        localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
         navigate('/');
       }
     } catch (error) {

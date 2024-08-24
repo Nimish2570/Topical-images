@@ -7,13 +7,7 @@ const ImageCard = ({ image, setimagehandler, setBackgroundImage, setFrameImage, 
       <img key={image.id} src={image.src.medium} alt={image.alt} />
       <div className="button-group">
         <button type="button" onClick={() => setimagehandler(image, setBackgroundImage)}>
-          Use As Background
-        </button>
-        <button type="button" onClick={() => setimagehandler(image, setFrameImage)}>
-          Use As Frame
-        </button>
-        <button type="button" onClick={() => setimagehandler(image, setLogoImage)}>
-          Use As Logo
+          Use 
         </button>
       </div>
     </div>

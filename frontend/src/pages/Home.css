@@ -67,7 +67,7 @@ label {
   align-items: center;
 }
 
-input[type="text"],
+.container input[type="text"],
 textarea {
   padding: 10px;
   border: 1px solid #ccc;
@@ -195,6 +195,7 @@ button:active {
   display: flex;
   flex-direction: row;
 }
+
 .generated-image{
   max-width: fit-content;
   max-height:410px;

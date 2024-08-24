@@ -6,6 +6,7 @@ import api from '../api';
 import { ACCESS_TOKEN } from '../constants';
 import { Navigate } from 'react-router-dom';
 import ImageCard from './ImageCard/ImageCard';
+import Header from './Header/Header';
 
 const Home = () => {
   const [title, setTitle] = useState('');
@@ -15,10 +16,31 @@ const Home = () => {
   const [logoImage, setLogoImage] = useState(null);
   const [generatedImageUrl, setGeneratedImageUrl] = useState(null);
   const [downloadUrl, setDownloadUrl] = useState(null);
+  const [downloadName, setDownloadName] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchedimages, setSearchedImages] = useState([]);
   const [prompt, setPrompt] = useState("");
   const [generatedImages , setGeneratedImages ] = useState("");
+  const [pexelApi , setPexelApi] = useState("");
+  const [getImgApi , setGetImgApi] = useState("");
+  
+
+  // const baseUrl = 'http://localhost:8000';
+  const baseUrl = 'https://r8oo8c8sc8c8kko04s4w0ckw.desync-game.com';
+
+  fetch(`${baseUrl}/profile/view/`, {
+    method: 'GET',
+    headers: {
+        'Authorization': `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+        'Content-Type': 'application/json',
+    },
+    })  
+    .then(response => response.json())
+    .then(data => {
+        setPexelApi(data.pexels_api || '');
+        setGetImgApi(data.getImg_api || '');
+        
+    })
 
 
 
@@ -32,7 +54,7 @@ const Home = () => {
         },
         {
           headers: {
-            Authorization: "Bearer key-10OpMM3P8i54BPhyCoc42IdhfzgFXRdayr9V3m8oDBEOfHO3D4M3qWjtDEFpkxmYjqJuoCT4pDsYKgacCO2F6T6vKiwqhhDh",
+            Authorization: "Bearer " + getImgApi,
             "Content-Type": "application/json",
           },
         }
@@ -56,7 +78,7 @@ const Home = () => {
     try {
       const response = await axios.get("https://api.pexels.com/v1/search", {
         headers: {
-          Authorization: "563492ad6f9170000100000159be2064dd894ec2add4d0e635cc60b2",
+          Authorization: pexelApi,
         },
         params: {
           query: searchTerm,
@@ -129,6 +151,7 @@ const Home = () => {
         const blob = new Blob([Uint8Array.from(atob(response.data.output_image_data), c => c.charCodeAt(0))], { type: 'image/png' });
         const url = URL.createObjectURL(blob);
         setDownloadUrl(url);
+        setDownloadName(response.data.output_image_name);
         const generateAI = document.querySelector('.generate-ai-image');
         const extraSettings = document.querySelector('.extra-settings');
         extraSettings.style.display = 'none' ;
@@ -183,7 +206,10 @@ const Home = () => {
 
   return (
     <div className="container">
+       <Header />
+      
       <h1>Topical Images</h1>
+      
       <form onSubmit={handleFormSubmit}>
         <div className="form-group">
           <label>Title:</label>
@@ -298,7 +324,7 @@ const Home = () => {
         <h2>Generated Image</h2>
         <img src={generatedImageUrl} alt="Generated" className="generated-image" />
        
-        <a href={downloadUrl} download='generated_image.png'>
+        <a href={downloadUrl} download={downloadName}>
           <button type="button" className='downloadButton'>Download</button>
         </a>
       </div>:

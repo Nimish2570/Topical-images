@@ -1,0 +1,86 @@
+/* Setting.css */
+.settings-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #ffffff;
+    min-height: 100vh;
+}
+
+h2 {
+    color: #4a4a4a;
+    margin-bottom: 20px;
+}
+
+.settings-form {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 100%;
+    max-width: 900px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+.apiInput {
+    width: 500px;
+    padding: 10px;
+    border: 2px solid #000000;
+    border-radius: 4px;
+    font-size: 16px;
+   
+}
+
+
+.save-button {
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+    background-color: #0056b3;
+}
+.settings-container label {
+    font-size: 1rem;
+    color: #120707;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+}
+
+.back-button {
+    background-color: #78b48b;
+    border: none;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 0;
+    /* place in right side */
+    align-self: flex-end;
+    
+}
+
+.back-button:hover {
+    background-color: #5de67a;
+}
+
+.loading {
+    font-size: 18px;
+    color: #007bff;
+}
+
+.error-message {
+    font-size: 18px;
+    color: #dc3545;
+}

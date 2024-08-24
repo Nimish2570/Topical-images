@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import Register from './pages/Register'
 import ProtectedRoutes from './components/ProtectedRoutes'
+import Setting from './pages/Settings/Setting.jsx'
 
 
 function logOut(){
@@ -25,6 +26,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/settings" element={<Setting />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

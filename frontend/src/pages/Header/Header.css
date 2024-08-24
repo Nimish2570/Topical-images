@@ -1,0 +1,36 @@
+.header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+    background-color: #f0f0f0; /* Adjust to your desired color */
+}
+
+.logoutButton {
+    background-color: #f0f0f0; /* Adjust to your desired color */
+    border: none;
+    color: #000; /* Adjust to your desired color */
+    font-size: 16px;
+    cursor: pointer;
+    padding: 10px;
+    margin-left: 10px;
+}
+.logoutButton:hover {
+    opacity: 1; /* Full opacity on hover */
+    background-color: red;
+
+}
+.settingsButton {
+    background-color: #f0f0f0; /* Adjust to your desired color */
+    border: none;
+    color: #000; /* Adjust to your desired color */
+    font-size: 16px;
+    cursor: pointer;
+    padding: 10px;
+    margin-left: 10px;
+}
+.settingsButton:hover {
+    opacity: 1; /* Full opacity on hover */
+    background-color: #416de5; /* Adjust to your desired color */
+    color: #fff; /* Adjust to your desired color */
+}

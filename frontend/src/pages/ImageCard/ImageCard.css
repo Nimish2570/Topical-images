@@ -18,7 +18,7 @@
 .ImageCard .button-group {
   display: none;
   position: absolute;
-  bottom: 10px;
+  bottom: 36%;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
@@ -31,11 +31,11 @@
 
 .ImageCard .button-group button {
   margin: 5px;
-  padding: 5px 10px;
+  padding: 10px 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  background-color: rgba(98, 0, 234, 0.4); /* 80% transparency */
+  background-color: rgba(20, 110, 189, 0.7); /* 80% transparency */
   color: white;
 }
 
