@@ -1,17 +1,25 @@
 /* ImageCard.css */
+
 .ImageCard {
-  border: 1px solid #ddd;
+  border: 1px solid #3f3c3c;
   border-radius: 8px;
   padding: 10px;
   margin: 10px;
   text-align: center;
-  background-color: #f9f9f9;
+  background-color: #cbc1c1;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .ImageCard img {
   max-width: 100%;
+  align-self: center;
   border-radius: 4px;
+  display: block;
+  margin: 0 auto; /* Center the image horizontally */
 }
 
 /* Initially hide the buttons */
@@ -33,13 +41,16 @@
   margin: 5px;
   padding: 10px 20px;
   border: none;
-  
   border-radius: 4px;
   cursor: pointer;
-  background-color: rgba(20, 110, 189, 0.5); /* 80% transparency */
+  background-color: rgba(20, 110, 189, 0.7); /* 80% transparency */
   color: white;
+  transition: transform 0.6s ease, box-shadow 0.3s ease;
+  
 }
 
 .ImageCard .button-group button:hover {
-  background-color: #3700b3;
+  background-color: rgba(255, 255, 255, 0.7);
+  color: black;
+  transform: scale(1.2);
 }

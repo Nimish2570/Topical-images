@@ -87,6 +87,7 @@ const Home = () => {
 
       } catch (err) {
           console.error('error:', err);
+          alert('Error generating image Check your Api key');
       }
   };
   
@@ -110,6 +111,7 @@ const Home = () => {
       setSearchedImages(response.data.photos);
     } catch (error) {
       console.error("Error fetching images:", error);
+      alert('Error fetching images Check your Api key');
     }
   };
 
