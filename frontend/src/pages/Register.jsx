@@ -34,10 +34,9 @@ const Register = () => {
       console.log(response.data);
 
       if (response.data) {
-        localStorage.setItem(ACCESS_TOKEN, response.data.access);
-        localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
-        // reload the page
-        
+        alert('User registered successfully');
+        navigate('/login');
+
       }
     } catch (error) {
       if (error.response.status === 400) {
