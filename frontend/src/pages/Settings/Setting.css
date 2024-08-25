@@ -1,86 +1,91 @@
-/* Setting.css */
+
+
 .settings-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    background-color: white;
+    width: 500px;
     padding: 20px;
-    background-color: #ffffff;
-    min-height: 100vh;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
 h2 {
-    color: #4a4a4a;
+    font-size: 24px;
     margin-bottom: 20px;
+    color: #333;
 }
 
-.settings-form {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 100%;
-    max-width: 900px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-.apiInput {
-    width: 500px;
-    padding: 10px;
-    border: 2px solid #000000;
-    border-radius: 4px;
-    font-size: 16px;
-   
-}
-
-
-.save-button {
-    background-color: #007bff;
-    border: none;
-    color: #fff;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.save-button:hover {
-    background-color: #0056b3;
-}
-.settings-container label {
-    font-size: 1rem;
-    color: #120707;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 80px;
-}
-
+/* Back Button */
 .back-button {
-    background-color: #78b48b;
-    border: none;
-    color: #fff;
-    padding: 10px 15px;
+    background-color: transparent;
+    position: fixed;
+    border: 2px solid #6200ea;
+    /* felx end */
+    right: 20px;
+    color: #6200ea;
+    padding: 8px 16px;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-bottom: 0;
-    /* place in right side */
-    align-self: flex-end;
-    
+    margin-bottom: 20px;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .back-button:hover {
-    background-color: #5de67a;
+    background-color: #6200ea;
+    color: white;
 }
 
-.loading {
-    font-size: 18px;
-    color: #007bff;
+/* Form Styles */
+.settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-.error-message {
-    font-size: 18px;
-    color: #dc3545;
+.settings-container .form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.settings-container label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.settings-container input.apiInput, select.apiInput {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+ .settings-container input.apiInput:focus, select.apiInput:focus {
+    border-color: #6200ea;
+    outline: none;
+}
+
+/* Save Button */
+.save-button {
+    background-color: #6200ea;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 16px;
+}
+
+.save-button:hover {
+    background-color: #4500b5;
+}
+
+/* Loading & Error Messages */
+.loading, .error-message {
+    font-size: 14px;
+    color: #6200ea;
+    margin-top: 20px;
 }

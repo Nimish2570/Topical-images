@@ -7,6 +7,11 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     pexels_api = models.CharField(max_length=255, blank=True, null=True)
     getImg_api = models.CharField(max_length=255, blank=True, null=True)
+    width = models.IntegerField(default=1280)
+    height = models.IntegerField(default=600)
+    steps = models.IntegerField(default=4)
+    output_format = models.CharField(max_length=255, default='jpeg')
+    
 
     def __str__(self):
         return self.user.username

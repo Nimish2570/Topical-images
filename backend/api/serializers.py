@@ -15,4 +15,4 @@ class UserSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['pexels_api', 'getImg_api']
+        fields = ['pexels_api', 'getImg_api', 'width', 'height', 'steps', 'output_format']

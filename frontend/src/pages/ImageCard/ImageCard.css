@@ -33,9 +33,10 @@
   margin: 5px;
   padding: 10px 20px;
   border: none;
+  
   border-radius: 4px;
   cursor: pointer;
-  background-color: rgba(20, 110, 189, 0.7); /* 80% transparency */
+  background-color: rgba(20, 110, 189, 0.5); /* 80% transparency */
   color: white;
 }
 

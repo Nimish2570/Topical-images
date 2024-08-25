@@ -162,7 +162,7 @@ button:active {
 /* Generated Image Area */
 .generated-image-area h2 {
   margin-top: 0;
-  text-align: center;
+  text-align:left;
 }
 
 .generated-image-area button {
@@ -202,7 +202,52 @@ button:active {
   max-width:820px;
 }
 .AI-generated-image{
-  margin-left: 90px;
+  
   align-items: center;
   justify-content: center;
+  align-self: center;
+}
+
+/* Style for the container of the ImageCard */
+.image-card-container {
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for the URL container */
+.url-container {
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for the URL text */
+.url-text {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 10px;
+  word-wrap: break-word; /* Ensures long URLs wrap correctly */
+}
+
+/* Style for the Use button */
+.use-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #fff;
+  background-color: #007bff; /* Blue background color */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.use-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
 }

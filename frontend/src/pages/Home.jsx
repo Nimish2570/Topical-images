@@ -23,7 +23,12 @@ const Home = () => {
   const [generatedImages , setGeneratedImages ] = useState("");
   const [pexelApi , setPexelApi] = useState("");
   const [getImgApi , setGetImgApi] = useState("");
-  
+  const [width, setWidth] = useState();
+  const [height, setHeight] = useState();
+  const [outputFormat, setOutputFormat] = useState('');
+  const [steps, setSteps] = useState(0);
+ 
+
 
   // const baseUrl = 'http://localhost:8000';
   const baseUrl = 'https://r8oo8c8sc8c8kko04s4w0ckw.desync-game.com';
@@ -39,33 +44,50 @@ const Home = () => {
     .then(data => {
         setPexelApi(data.pexels_api || '');
         setGetImgApi(data.getImg_api || '');
+        setWidth(data.width || 1280);
+        setHeight(data.height || 600);
+        setSteps(data.steps || 4);
+        setOutputFormat(data.output_format || 'jpeg');
+       
+
         
     })
 
 
 
-  const generateImages = async () => {
-    try {
-      const response = await axios.post(
-        "https://api.getimg.ai/v1/stable-diffusion/text-to-image",
-        {
-          prompt: prompt,
-          n: 6, 
+    const generateImages = async () => {
+      const url = 'https://api.getimg.ai/v1/flux-schnell/text-to-image';
+      const options = {
+        method: 'POST',
+        headers: {
+          accept: 'application/json',
+          'content-type': 'application/json',
+          authorization: 'Bearer ' + getImgApi,
         },
-        {
-          headers: {
-            Authorization: "Bearer " + getImgApi,
-            "Content-Type": "application/json",
-          },
-        }
-      )
-  
-      const imageUrl = `data:image/jpeg;base64,${response.data.image}`;
-      setGeneratedImages([imageUrl]); 
+        body: JSON.stringify({
+          prompt: prompt,
+          width: width,
+          height: height,
+          steps: steps,
+          output_format: outputFormat,
+          response_format: 'b64',
+
+        
+        })
+      };
       
-    } catch (error) {
-      console.error("Error fetching images:", error);
-    }
+  
+      try {
+          const response = await fetch(url, options);
+          const json = await response.json();
+          if(json.image){
+            const imageUrl = `data:image/jpeg;base64,${json.image}`;
+            setGeneratedImages([imageUrl]); 
+          }
+
+      } catch (err) {
+          console.error('error:', err);
+      }
   };
   
 
@@ -299,22 +321,18 @@ const Home = () => {
             <button type="button"  onClick={handleGenerate}>Generate</button>
           </div>
           <div className="AI-generated-image">
-          {generatedImages && generatedImages.length > 0 && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-          {/* Render ImageCard for each generated image */}
-          {generatedImages.map((image, index) => (
-            
+          {generatedImages && (
             <ImageCard
-              key={index}
-              image={{ id: index, src: { medium: image }, alt: `Generated Image ${index}` }}
+
+               image={{ id: 1, src: { medium: generatedImages[0] } }}
               setimagehandler={setimagehandler}
               setBackgroundImage={setBackgroundImage}
               setFrameImage={setFrameImage}
               setLogoImage={setLogoImage}
             />
-          ))}
-        </div>
-      )}
+    
+          )}
+         
           </div>
         </div>
       </form>
