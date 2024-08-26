@@ -236,8 +236,11 @@ def overlay_images(background_img, logo_img, frame_img, title, text_list):
     text_list = text_list.replace('-', "•")
     list_items = text_list.split('\n')
     
-    # remove last character from list items
-    list_items = [item[:-1] for item in list_items]
+    # remove last character from list items but not from last item
+    for i in range(len(list_items)):
+        if i != len(list_items) - 1:
+            list_items[i] = list_items[i][:-1]
+            
 
     # Create the final image by overlaying text on the combined image
     final_img = create_centered_text_image(list_items, combined_img)
