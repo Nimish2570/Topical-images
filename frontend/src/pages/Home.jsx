@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useCallback ,useEffect } from 'react';
 import axios from 'axios';
 import './Home.css';
 import dummyimage from './../components/Images/404.png';
@@ -18,136 +18,125 @@ const Home = () => {
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [downloadName, setDownloadName] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchedimages, setSearchedImages] = useState([]);
+  const [searchedImages, setSearchedImages] = useState([]);
   const [prompt, setPrompt] = useState("");
-  const [generatedImages , setGeneratedImages ] = useState("");
-  const [pexelApi , setPexelApi] = useState("");
-  const [getImgApi , setGetImgApi] = useState("");
-  const [width, setWidth] = useState();
-  const [height, setHeight] = useState();
-  const [outputFormat, setOutputFormat] = useState('');
-  const [steps, setSteps] = useState(0);
- 
+  const [generatedImages, setGeneratedImages] = useState("");
+  const [pexelApi, setPexelApi] = useState("");
+  const [getImgApi, setGetImgApi] = useState("");
+  const [width, setWidth] = useState(1280);
+  const [height, setHeight] = useState(600);
+  const [outputFormat, setOutputFormat] = useState('jpeg');
+  const [steps, setSteps] = useState(4);
 
-
-  // const baseUrl = 'http://localhost:8000';
   const baseUrl = 'https://r8oo8c8sc8c8kko04s4w0ckw.desync-game.com';
+  // const baseUrl = 'http://localhost:8000';
 
-  fetch(`${baseUrl}/profile/view/`, {
-    method: 'GET',
-    headers: {
-        'Authorization': `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
-        'Content-Type': 'application/json',
-    },
-})
-    .then(response => {
-        if (!response.ok) {
-            // Check for specific HTTP status codes if needed
-            if (response.status === 401) {
-                // Unauthorized, redirect to login
-                window.location.href = '/login';  // Replace with your login page URL
-            }
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        setPexelApi(data.pexels_api || '');
-        setGetImgApi(data.getImg_api || '');
-        setWidth(data.width || 1280);
-        setHeight(data.height || 600);
-        setSteps(data.steps || 4);
-        setOutputFormat(data.output_format || 'jpeg');
-    })
-    .catch(error => {
-        // Handle other errors (e.g., network issues)
-        console.error('There has been a problem with your fetch operation:', error);
-        alert('your session has expired please login again');
-        // remove the token from local storage
-        localStorage.removeItem(ACCESS_TOKEN);
-
-    });
-
-
-    const generateImages = async () => {
-      if(getImgApi === "") {
-        alert('Please enter your GetImg Api key in settings');
-        return;
-      }
-      const url = 'https://api.getimg.ai/v1/flux-schnell/text-to-image';
-      const options = {
-        method: 'POST',
+  const fetchProfileData = useCallback(async () => {
+    try {
+      const response = await fetch(`${baseUrl}/profile/view/`, {
+        method: 'GET',
         headers: {
-          accept: 'application/json',
-          'content-type': 'application/json',
-          authorization: 'Bearer ' + getImgApi,
+          'Authorization': `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          prompt: prompt,
-          width: width,
-          height: height,
-          steps: steps,
-          output_format: outputFormat,
-          response_format: 'b64',
+      });
 
-        
-        })
-      };
-      
-  
-      try {
-          const response = await fetch(url, options);
-          const json = await response.json();
-          if(json.image){
-            const imageUrl = `data:image/jpeg;base64,${json.image}`;
-            const blob = createBlobFromImageUrl(imageUrl);
-            // set background image
-            blob.then((blob) => {
-              setBackgroundImage(blob);
-            });
-
-
-          }
-
-      } catch (err) {
-          console.error('error:', err);
-          alert('Error generating image Check your Api key');
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = '/login'; // Redirect to login if unauthorized
+        }
+        throw new Error('Network response was not ok');
       }
-  };
-  
 
-  
+      const data = await response.json();
+      setPexelApi(data.pexels_api || '');
+      setGetImgApi(data.getImg_api || '');
+      setWidth(data.width || 1280);
+      setHeight(data.height || 600);
+      setSteps(data.steps || 4);
+      setOutputFormat(data.output_format || 'jpeg');
+    } catch (error) {
+      console.error('There has been a problem with your fetch operation:', error);
+      localStorage.removeItem(ACCESS_TOKEN);
+      window.location.reload();
+      alert('Your session has expired. Please log in again.');
+    }
+  }, [baseUrl]);
+
+  useEffect(() => {
+    if (localStorage.getItem(ACCESS_TOKEN)) {
+      fetchProfileData();
+    }
+  }, [fetchProfileData]);
+
+  const generateImages = async () => {
+    if (!getImgApi) {
+      alert('Please enter your GetImg Api key in settings');
+      return;
+    }
+
+    const url = 'https://api.getimg.ai/v1/flux-schnell/text-to-image';
+    const options = {
+      method: 'POST',
+      headers: {
+        accept: 'application/json',
+        'content-type': 'application/json',
+        authorization: `Bearer ${getImgApi}`,
+      },
+      body: JSON.stringify({
+        prompt,
+        width,
+        height,
+        steps,
+        output_format: outputFormat,
+        response_format: 'b64',
+      }),
+    };
+
+    try {
+      const response = await fetch(url, options);
+      const json = await response.json();
+      if (json.image) {
+        const imageUrl = `data:image/jpeg;base64,${json.image}`;
+        const blob = await createBlobFromImageUrl(imageUrl);
+        setBackgroundImage(blob);
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      alert('Error generating image. Check your API key.');
+    }
+  };
+
   const handleGenerate = () => {
     generateImages();
   };
 
   const fetchImages = async () => {
-    if (pexelApi === "") {
+    if (!pexelApi) {
       alert('Please enter your Pexel Api key in settings');
       return;
     }
-    try {
 
+    try {
       const response = await axios.get("https://api.pexels.com/v1/search", {
         headers: {
           Authorization: pexelApi,
         },
         params: {
           query: searchTerm,
-          per_page: 30, // Number of images to fetch
+          per_page: 30,
         },
       });
       setSearchedImages(response.data.photos);
     } catch (error) {
       console.error("Error fetching images:", error);
-      alert('Error fetching images Check your Api key');
+      alert('Error fetching images. Check your API key.');
     }
   };
 
   const handleSearch = () => {
     fetchImages();
   };
-  
 
   const handleImageChange = (e, setImage) => {
     const file = e.target.files[0];
@@ -156,14 +145,9 @@ const Home = () => {
     }
   };
 
-
-  if (!localStorage.getItem(ACCESS_TOKEN)) {
-    return <Navigate to="/login" />;
-  }
-  const createBlobFromImageUrl = (url) => {
-    return fetch(url)
-      .then(res => res.blob())
-      .then(blob => blob);
+  const createBlobFromImageUrl = async (url) => {
+    const res = await fetch(url);
+    return res.blob();
   };
 
   const handleFormSubmit = async (e) => {
@@ -180,13 +164,12 @@ const Home = () => {
     if (backgroundImage) {
       const backgroundImageBlob = await createBlobFromImageUrl(document.getElementById('Background-Preview').src);
       formData.append('background_image', backgroundImageBlob, 'background_image.png');
-    }
-    else{
+    } else {
       alert('Please select a background image');
-      return
+      return;
     }
     if (logoImage) {
-      const logoImageBlob = await createBlobFromImageUrl((document.getElementById('Logo-Preview').src));
+      const logoImageBlob = await createBlobFromImageUrl(document.getElementById('Logo-Preview').src);
       formData.append('logo_image', logoImageBlob, 'logo_image.png');
     }
 
@@ -205,27 +188,26 @@ const Home = () => {
         const url = URL.createObjectURL(blob);
         setDownloadUrl(url);
         setDownloadName(response.data.output_image_name);
-        const generateAI = document.querySelector('.generate-ai-image');
-        const extraSettings = document.querySelector('.extra-settings');
-        extraSettings.style.display = 'none' ;
-        generateAI.style.display = 'none' ;
-
-
+        
+        document.querySelector('.generate-ai-image').style.display = 'none';
+        document.querySelector('.extra-settings').style.display = 'none';
       }
-
     } catch (error) {
-      alert('Error generating image',);
+      alert('Error generating image.');
     }
   };
-  
-  const setimagehandler = (e,setImage) => {
-  
+
+  const setImageHandler = (e, setImage) => {
     const imageUrl = e.src.medium;
-    const blob = createBlobFromImageUrl(imageUrl);
-    blob.then((blob) => {
+    createBlobFromImageUrl(imageUrl).then((blob) => {
       setImage(blob);
     });
   };
+
+  if (!localStorage.getItem(ACCESS_TOKEN)) {
+    return <Navigate to="/login" />;
+  }
+
 
 
 
@@ -295,8 +277,8 @@ const Home = () => {
             <button type="button"  onClick={handleSearch}>Search</button>
           </div>
           <div className="pexel-images">
-          {searchedimages.length > 0 ? (
-            searchedimages.map((image) => (
+          {searchedImages.length > 0 ? (
+            searchedImages.map((image) => (
               <ImageCard
                 key={image.id}
                 image={image}

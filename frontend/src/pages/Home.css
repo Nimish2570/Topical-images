@@ -193,12 +193,13 @@ button:active {
   transform: scale(0.98);
 }
 
-.form-group {
+.container .form-group {
   margin-bottom: 20px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+
 }
 
 .generated-image{

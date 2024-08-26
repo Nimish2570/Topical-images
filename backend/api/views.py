@@ -159,6 +159,28 @@ def overlay_images(background_img, logo_img, frame_img, title, text_list):
     combined_img.paste(background_resized, offset)
 
     # Resize and paste the logo
+
+    def create_fading_oval_cloud(size, rect_height, rect_width, fade_radius):
+        width, height = size
+        cloud = Image.new('RGBA', size, (255, 255, 255, 0))  # Start with a fully transparent image
+        
+        # Create a mask for the fading effect
+        mask = Image.new('L', size, 0)  # Start with a fully transparent mask
+        mask_draw = ImageDraw.Draw(mask)
+        
+        # Draw the rectangle
+        mask_draw.rectangle((0, 0, rect_width, rect_height), fill=255)  # Rectangle is white (opaque in cloud)
+        
+        # Draw the hemisphere
+        mask_draw.ellipse((rect_width - rect_height // 2, 0, rect_width + rect_height // 2, rect_height), fill=255)  # Hemisphere is white (opaque in cloud)
+        
+        # Apply Gaussian blur to the mask
+        mask = mask.filter(ImageFilter.GaussianBlur(fade_radius))
+        
+        # Apply the mask to the cloud image
+        cloud.putalpha(mask)
+        
+        return cloud
     if logo_provided:
         logo_aspect_ratio = logo_width / logo_height
         new_logo_height = 100 
