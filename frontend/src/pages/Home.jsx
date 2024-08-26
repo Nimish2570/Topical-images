@@ -39,8 +39,18 @@ const Home = () => {
         'Authorization': `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
         'Content-Type': 'application/json',
     },
-    })  
-    .then(response => response.json())
+})
+    .then(response => {
+        if (!response.ok) {
+            // Check for specific HTTP status codes if needed
+            if (response.status === 401) {
+                // Unauthorized, redirect to login
+                window.location.href = '/login';  // Replace with your login page URL
+            }
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
     .then(data => {
         setPexelApi(data.pexels_api || '');
         setGetImgApi(data.getImg_api || '');
@@ -48,11 +58,15 @@ const Home = () => {
         setHeight(data.height || 600);
         setSteps(data.steps || 4);
         setOutputFormat(data.output_format || 'jpeg');
-       
-
-        
     })
+    .catch(error => {
+        // Handle other errors (e.g., network issues)
+        console.error('There has been a problem with your fetch operation:', error);
+        alert('your session has expired please login again');
+        // remove the token from local storage
+        localStorage.removeItem(ACCESS_TOKEN);
 
+    });
 
 
     const generateImages = async () => {
@@ -296,7 +310,7 @@ const Home = () => {
         <div className="extra-settings" style={{ display: 'none' }}>
           <div className="form-group">
             <label>Search </label>
-            <input type="text" placeholder="Search Background Images" value={searchTerm}  onChange={(e) => setSearchTerm(e.target.value)} />
+            <textarea  placeholder="Search Background Images" value={searchTerm}  onChange={(e) => setSearchTerm(e.target.value)} />
             <button type="button"  onClick={handleSearch}>Search</button>
           </div>
           <div className="pexel-images">
@@ -319,7 +333,7 @@ const Home = () => {
         <div className="generate-ai-image" style={{ display: 'none' }}>
           <div className="form-group">
             <label>Write Prompt</label>
-            <input type="text" placeholder="Search Images"   value={prompt} onChange={(e) => setPrompt(e.target.value)}/>
+            <textarea  placeholder="Search Images"   value={prompt} onChange={(e) => setPrompt(e.target.value)}/>
             <button type="button"  onClick={handleGenerate}>Generate</button>
           </div>
           <div className="AI-generated-image">

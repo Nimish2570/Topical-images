@@ -53,14 +53,82 @@ max_width = 1640
 
 
 
-def overlay_images(background_img, logo_img, frame_img, title):
-    # Open and resize images using PIL
-    background = Image.open(background_img)
-    background_width, background_height = background.size
-    background = background.resize((1640, 820)).convert('RGBA')  
-    logoProvided = True if logo_img else False
-
+def create_centered_text_image(text_list, base_image):
+    # Set image dimensions
+    transparent_img_size = (1380, 550)
     
+    # Create a transparent image
+    transparent_img = Image.new('RGBA', transparent_img_size, (0, 0, 0, 0))
+    
+    # Load a font with a larger size (adjust the path and size as needed)
+    font_path = finders.find('fonts/MADEOkineSansPERSONALUSE-Bold.otf')  # Update this to the path of your .ttf font file
+    font_size = 40  # Adjust the font size as needed
+    if len(text_list) > 24:
+        font_size = 30
+    if len(text_list) <20:
+        font_size = 50
+    font = ImageFont.truetype(font_path, font_size)
+    
+    draw = ImageDraw.Draw(transparent_img)
+    
+    # Calculate dimensions for text
+    max_items_per_column = 8
+    if len(text_list) > 24:
+        max_items_per_column = 12
+        
+    num_columns = (len(text_list) + max_items_per_column - 1) // max_items_per_column
+    column_width = transparent_img_size[0] // num_columns
+    
+    # Start drawing text
+    y_offset = 0
+    current_column = 0
+    
+    for i, text in enumerate(text_list):
+        if i > 0 and i % max_items_per_column == 0:
+            current_column += 1
+            y_offset = 0
+        
+        # Calculate text position using textbbox
+        text_bbox = draw.textbbox((0, 0), text, font=font)
+        text_width = text_bbox[2] - text_bbox[0]
+        text_x = (current_column * column_width) + (column_width - text_width) // 2
+        text_y = y_offset * (transparent_img_size[1] // max_items_per_column)
+        
+        # Draw the text with a border
+        border_size = 2  # Thickness of the border
+        border_color = "black"
+        for dx in range(-border_size, border_size + 1):
+            for dy in range(-border_size, border_size + 1):
+                if dx != 0 or dy != 0:  # Avoid drawing on the original text location
+                    draw.text((text_x + dx, text_y + dy), text, font=font, fill=border_color)
+        
+        # Draw the main text on top of the border
+        draw.text((text_x, text_y), text, font=font, fill="white")
+        
+        y_offset += 1
+    
+    # Convert the transparent image to RGBA format for blending
+    transparent_img = transparent_img.convert("RGBA")
+    
+    # Convert the base image to RGBA if not already
+    if base_image.mode != 'RGBA':
+        base_image = base_image.convert('RGBA')
+    
+    # Calculate offset for centering the transparent image on the base image
+    x_offset = (base_image.width - transparent_img.width) // 2
+    y_offset = (base_image.height - transparent_img.height) // 2
+    
+    # Paste the transparent image onto the base image
+    base_image.paste(transparent_img, (x_offset, 50), transparent_img)
+    
+    return base_image.convert('RGB')
+
+def overlay_images(background_img, logo_img, frame_img, title, text_list):
+    # Open and resize images using PIL
+    background = Image.open(background_img).resize((1640, 820)).convert('RGBA')
+    logo_provided = bool(logo_img)
+    
+    # Load or create frame and logo images
     if frame_img:
         frame = Image.open(frame_img).resize((1640, 820)).convert('RGBA')
     else:
@@ -73,70 +141,46 @@ def overlay_images(background_img, logo_img, frame_img, title):
     
     logo_width, logo_height = logo.size
 
-    # Create a blank image with the of 1640x820
+    # Create a blank image of 1640x820
     combined_img = Image.new('RGBA', (1640, 820), (255, 255, 255, 0))
 
-    # Paste the background image
+    # Blur and paste the background
     blurred_background = background.filter(ImageFilter.GaussianBlur(10))
     combined_img.paste(blurred_background, (0, 0), blurred_background)
 
-    #resize background image without making it look stretched
-    
-    background_aspect_ratio =background_width / background_height
-    new_height= 580
+    # Resize background image without stretching
+    background_aspect_ratio = background.width / background.height
+    new_height = 580
     new_width = int(new_height * background_aspect_ratio)
-    background = background.resize((new_width, new_height))
-    # paste in between the frame
-    offset = ((blurred_background.width - background.width) // 2, 0)
-    combined_img.paste(background, offset)
-
+    background_resized = background.resize((new_width, new_height))
     
-    # logo 
-    logo_aspect_ratio = logo_width / logo_height
-    new_logo_height = 100 
-    new_logo_width = int(new_logo_height * logo_aspect_ratio)
-    logo = logo.resize((new_logo_width, new_logo_height))
-    # Paste the logo image
-    def create_fading_oval_cloud(size,rect_height, rect_width, fade_radius):
-        width, height = size
-        cloud = Image.new('RGBA', size, (255, 255, 255, 0))  # Start with a fully transparent image
+    # Paste resized background in the center of the frame
+    offset = ((blurred_background.width - background_resized.width) // 2, 0)
+    combined_img.paste(background_resized, offset)
+
+    # Resize and paste the logo
+    if logo_provided:
+        logo_aspect_ratio = logo_width / logo_height
+        new_logo_height = 100 
+        new_logo_width = int(new_logo_height * logo_aspect_ratio)
+        logo = logo.resize((new_logo_width, new_logo_height))
         
-        # Create a mask for the fading effect
-        mask = Image.new('L', size, 0)  # Start with a fully transparent mask
-        mask_draw = ImageDraw.Draw(mask)
-        
-        # Draw the rectangle
-        mask_draw.rectangle((0, 0, rect_width, rect_height), fill=255)  # Rectangle is white (opaque in cloud)
-        
-        # Draw the hemisphere
-        mask_draw.ellipse((rect_width - rect_height//2, 0, rect_width + rect_height//2, rect_height), fill=255)  # Hemisphere is white (opaque in cloud)
-        
-        # Apply Gaussian blur to the mask
-        mask = mask.filter(ImageFilter.GaussianBlur(fade_radius))
-        
-        # Apply the mask to the cloud image
-        cloud.putalpha(mask)
-        
-        return cloud
-    cloud_size = (logo.width + 700, logo.height + 500)
-    fade_radius =  40# Adjust the fading radius as needed
-    rect_height = logo.height +60 
-    rect_width = logo.width + 20
-    cloud_img = create_fading_oval_cloud(cloud_size, rect_height , rect_width, fade_radius)
-    cloud_img.paste(logo, (10, 10), logo)
-    if logoProvided:
-        combined_img.paste(cloud_img, (0,0), cloud_img)
+        cloud_size = (logo.width + 700, logo.height + 500)
+        fade_radius = 40
+        rect_height = logo.height + 60
+        rect_width = logo.width + 20
+
+        cloud_img = create_fading_oval_cloud(cloud_size, rect_height, rect_width, fade_radius)
+        cloud_img.paste(logo, (10, 10), logo)
+        combined_img.paste(cloud_img, (0, 0), cloud_img)
 
     # Paste the frame image
-
     combined_img.paste(frame, (0, 0), frame)
 
-
-    # Load bold font
-    font_path = finders.find('fonts/MADEOkineSansPERSONALUSE-Bold.otf')
+    # Load bold font for the title
+    font_path = finders.find('fonts/MADEOkineSansPERSONALUSE-Bold.otf') # Adjust this path
     font_size = 60
     title_font = ImageFont.truetype(font_path, font_size)
-   
 
     # Capitalize the title text
     title_text = title.upper()
@@ -146,8 +190,8 @@ def overlay_images(background_img, logo_img, frame_img, title):
     image_width = 1640
     image_height = 820
 
-    # Set line spacing
-    line_spacing = 20  # Adjust this value as needed
+    # Line spacing
+    line_spacing = 20
 
     # Initialize the draw object
     title_draw = ImageDraw.Draw(combined_img)
@@ -157,11 +201,7 @@ def overlay_images(background_img, logo_img, frame_img, title):
 
     # Wrap the text
     wrapped_text = textwrap.fill(title_text, width=max_char_per_line)
-
-    # Split wrapped text into individual lines
     lines = wrapped_text.split('\n')
-    # add 1 blank line at the end
-   
 
     # Calculate the total height needed for the text with line spacing
     total_text_height = sum(
@@ -187,10 +227,23 @@ def overlay_images(background_img, logo_img, frame_img, title):
         text_height = text_bbox[3] - text_bbox[1]
         x_position = start_x + (text_area_width - text_width) / 2
         title_draw.text((x_position, centered_start_y), line, font=title_font, fill=title_color)
-        centered_start_y += text_height + line_spacing  # Move down for the next line with spacing
+        centered_start_y += text_height + line_spacing
 
-    return combined_img.convert('RGB')
-    # Convert to RGB if needed for JPEG
+    # Convert the combined image to RGB if needed for JPEG
+    combined_img = combined_img.convert('RGBA')
+
+    # Replace dashes with bullets in the text list and split it into individual items
+    text_list = text_list.replace('-', "•")
+    list_items = text_list.split('\n')
+    
+    # remove last character from list items
+    list_items = [item[:-1] for item in list_items]
+
+    # Create the final image by overlaying text on the combined image
+    final_img = create_centered_text_image(list_items, combined_img)
+    
+    return final_img.convert('RGB')
+
 
 @csrf_exempt
 def generateImage(request):
@@ -207,7 +260,7 @@ def generateImage(request):
 
 
         # Call the overlay_images function
-        output_image = overlay_images(background_image, logo_image, frame_image, title)
+        output_image = overlay_images(background_image, logo_image, frame_image, title, text_list)
 
         # Save the output image
         upload_dir = os.path.join(settings.MEDIA_ROOT, 'uploaded_images')
