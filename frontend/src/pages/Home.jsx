@@ -70,6 +70,10 @@ const Home = () => {
 
 
     const generateImages = async () => {
+      if(getImgApi === "") {
+        alert('Please enter your GetImg Api key in settings');
+        return;
+      }
       const url = 'https://api.getimg.ai/v1/flux-schnell/text-to-image';
       const options = {
         method: 'POST',
@@ -112,7 +116,12 @@ const Home = () => {
   };
 
   const fetchImages = async () => {
+    if (pexelApi === "") {
+      alert('Please enter your Pexel Api key in settings');
+      return;
+    }
     try {
+
       const response = await axios.get("https://api.pexels.com/v1/search", {
         headers: {
           Authorization: pexelApi,
