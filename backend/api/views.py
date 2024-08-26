@@ -238,8 +238,8 @@ def generateImage(request):
             # Use translate to remove the specified characters
             title = title.translate(translation_table)
             title = title.replace(" ", "_")
-            if len(title) > 20:
-                title = title[:20]
+            if len(title) > 250:
+                title = title[:250]
                 
             title += ".avif"
             output_path = title
