@@ -125,7 +125,9 @@ def create_centered_text_image(text_list, base_image):
 
 def overlay_images(background_img, logo_img, frame_img, title, text_list):
     # Open and resize images using PIL
+    width, height = Image.open(background_img).size
     background = Image.open(background_img).resize((1640, 820)).convert('RGBA')
+   
     logo_provided = bool(logo_img)
     
     # Load or create frame and logo images
@@ -149,9 +151,11 @@ def overlay_images(background_img, logo_img, frame_img, title, text_list):
     combined_img.paste(blurred_background, (0, 0), blurred_background)
 
     # Resize background image without stretching
-    background_aspect_ratio = background.width / background.height
+    background_aspect_ratio = width / height  
+    
     new_height = 580
     new_width = int(new_height * background_aspect_ratio)
+
     background_resized = background.resize((new_width, new_height))
     
     # Paste resized background in the center of the frame
@@ -316,6 +320,8 @@ def generateImage(request):
             # Use translate to remove the specified characters
             title = title.translate(translation_table)
             title = title.replace(" ", "_")
+            title = title.replace(",", "")
+            
             if len(title) > 250:
                 title = title[:250]
                 

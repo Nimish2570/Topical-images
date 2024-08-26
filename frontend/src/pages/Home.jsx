@@ -124,7 +124,7 @@ const Home = () => {
         },
         params: {
           query: searchTerm,
-          per_page: 30,
+          per_page: 40,
         },
       });
       setSearchedImages(response.data.photos);
@@ -152,11 +152,11 @@ const Home = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
+  
     const formData = new FormData();
     formData.append('title', title);
     formData.append('list', list);
-
+  
     if (frameImage) {
       const frameImageBlob = await createBlobFromImageUrl(document.getElementById('Frame-Preview').src);
       formData.append('frame_image', frameImageBlob, 'frame_image.png');
@@ -172,20 +172,29 @@ const Home = () => {
       const logoImageBlob = await createBlobFromImageUrl(document.getElementById('Logo-Preview').src);
       formData.append('logo_image', logoImageBlob, 'logo_image.png');
     }
-
+  
     try {
       const response = await api.post('/generateImage/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-
+  
       if (response.data.output) {
         const uniqueUrl = `${response.data.output}?${new Date().getTime()}`;
         setGeneratedImageUrl(uniqueUrl);
-
+  
         const blob = new Blob([Uint8Array.from(atob(response.data.output_image_data), c => c.charCodeAt(0))], { type: 'image/png' });
         const url = URL.createObjectURL(blob);
+        
+        // Automatically trigger the download
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = response.data.output_image_name;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
         setDownloadUrl(url);
         setDownloadName(response.data.output_image_name);
         
@@ -195,7 +204,6 @@ const Home = () => {
       alert('Error generating image.');
     }
   };
-
   const setimagehandler = (e, setImage) => {
     const imageUrl = e.src.medium;
     createBlobFromImageUrl(imageUrl).then((blob) => {
@@ -337,9 +345,7 @@ const Home = () => {
         <h2>Generated Image</h2>
         <img src={generatedImageUrl} alt="Generated" className="generated-image" />
        
-        <a href={downloadUrl} download={downloadName}>
-          <button type="button" className='downloadButton'>Download</button>
-        </a>
+       
       </div>:
       <div className="generated-image-area">
       </div>}
