@@ -100,7 +100,13 @@ const Home = () => {
           const json = await response.json();
           if(json.image){
             const imageUrl = `data:image/jpeg;base64,${json.image}`;
-            setGeneratedImages([imageUrl]); 
+            const blob = createBlobFromImageUrl(imageUrl);
+            // set background image
+            blob.then((blob) => {
+              setBackgroundImage(blob);
+            });
+
+
           }
 
       } catch (err) {
@@ -277,6 +283,41 @@ const Home = () => {
             onChange={(e) => setList(e.target.value)}
           />
         </div>
+        <div className="button-group">
+           <button type="button" onClick={stockPhotosSearchHandler}>Search Stock Photos</button>
+           <button type="button" onClick={generateaihandler}>Generate AI Images</button>
+        </div>
+
+        <div className="extra-settings" style={{ display: 'none' }}>
+          <div className="form-group">
+            <label>Search </label>
+            <textarea  placeholder="Search Background Images" value={searchTerm}  onChange={(e) => setSearchTerm(e.target.value)} />
+            <button type="button"  onClick={handleSearch}>Search</button>
+          </div>
+          <div className="pexel-images">
+          {searchedimages.length > 0 ? (
+            searchedimages.map((image) => (
+              <ImageCard
+                key={image.id}
+                image={image}
+                setimagehandler={setimagehandler}
+                setBackgroundImage={setBackgroundImage}
+                setFrameImage={setFrameImage}
+                setLogoImage={setLogoImage}
+              />
+            ))
+          ) : (
+            <p></p>
+          )}
+        </div>
+        </div>
+        <div className="generate-ai-image" style={{ display: 'none' }}>
+          <div className="form-group">
+            <label>Write Prompt</label>
+            <textarea  placeholder="Search Images"   value={prompt} onChange={(e) => setPrompt(e.target.value)}/>
+            <button type="button"  onClick={handleGenerate}>Generate</button>
+          </div>
+        </div>
         <div className="image-input-group">
           <div className="image-input">
             <label>Frame Image:</label>
@@ -312,54 +353,8 @@ const Home = () => {
           <button type="submit">Generate Final Image</button>
         </div>
 
-        <div className="button-group">
-           <button type="button" onClick={stockPhotosSearchHandler}>Search Stock Photos</button>
-           <button type="button" onClick={generateaihandler}>Generate AI Images</button>
-        </div>
-        <div className="extra-settings" style={{ display: 'none' }}>
-          <div className="form-group">
-            <label>Search </label>
-            <textarea  placeholder="Search Background Images" value={searchTerm}  onChange={(e) => setSearchTerm(e.target.value)} />
-            <button type="button"  onClick={handleSearch}>Search</button>
-          </div>
-          <div className="pexel-images">
-          {searchedimages.length > 0 ? (
-            searchedimages.map((image) => (
-              <ImageCard
-                key={image.id}
-                image={image}
-                setimagehandler={setimagehandler}
-                setBackgroundImage={setBackgroundImage}
-                setFrameImage={setFrameImage}
-                setLogoImage={setLogoImage}
-              />
-            ))
-          ) : (
-            <p>No images found</p>
-          )}
-        </div>
-        </div>
-        <div className="generate-ai-image" style={{ display: 'none' }}>
-          <div className="form-group">
-            <label>Write Prompt</label>
-            <textarea  placeholder="Search Images"   value={prompt} onChange={(e) => setPrompt(e.target.value)}/>
-            <button type="button"  onClick={handleGenerate}>Generate</button>
-          </div>
-          <div className="AI-generated-image">
-          {generatedImages && (
-            <ImageCard
-
-               image={{ id: 1, src: { medium: generatedImages[0] } }}
-              setimagehandler={setimagehandler}
-              setBackgroundImage={setBackgroundImage}
-              setFrameImage={setFrameImage}
-              setLogoImage={setLogoImage}
-            />
-    
-          )}
-         
-          </div>
-        </div>
+        
+        
       </form>
       
        {generatedImageUrl?

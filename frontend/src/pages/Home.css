@@ -146,6 +146,8 @@ button {
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
   margin-right: 10px;
+
+  max-height: 40px;
 }
 
 button:hover {
@@ -195,6 +197,8 @@ button:active {
   margin-bottom: 20px;
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 .generated-image{
