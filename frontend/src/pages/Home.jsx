@@ -189,7 +189,6 @@ const Home = () => {
         setDownloadUrl(url);
         setDownloadName(response.data.output_image_name);
         
-        document.querySelector('.generate-ai-image').style.display = 'none';
         document.querySelector('.extra-settings').style.display = 'none';
       }
     } catch (error) {
@@ -197,7 +196,7 @@ const Home = () => {
     }
   };
 
-  const setImageHandler = (e, setImage) => {
+  const setimagehandler = (e, setImage) => {
     const imageUrl = e.src.medium;
     createBlobFromImageUrl(imageUrl).then((blob) => {
       setImage(blob);
@@ -214,20 +213,11 @@ const Home = () => {
 
   const stockPhotosSearchHandler = () => {
     const extraSettings = document.querySelector('.extra-settings');
-    const generateAI = document.querySelector('.generate-ai-image');
-    generateAI.style.display = 'none' ;
     extraSettings.style.display = extraSettings.style.display === 'block' ? 'none' : 'block';
 
   };
 
-  const generateaihandler = () => {
-    const generateAI = document.querySelector('.generate-ai-image');
-    const extraSettings = document.querySelector('.extra-settings');
-    extraSettings.style.display = 'none' ;
-    generateAI.style.display = generateAI.style.display === 'block' ? 'none' : 'block';
 
-    
-  };
 
   document.querySelectorAll('textarea').forEach(textarea => {
     textarea.style.overflow = 'hidden'; // Disable scrollbars
@@ -265,9 +255,18 @@ const Home = () => {
             onChange={(e) => setList(e.target.value)}
           />
         </div>
+        
+        <div className="form-group">
+          
+          <label>Image Prompt</label>
+          <textarea  placeholder="Search Images"   value={prompt} onChange={(e) => setPrompt(e.target.value)}/>
+          
+          <button type="button"  onClick={handleGenerate}>Generate</button>
+        </div>
+        
         <div className="button-group">
            <button type="button" onClick={stockPhotosSearchHandler}>Search Stock Photos</button>
-           <button type="button" onClick={generateaihandler}>Generate AI Images</button>
+         
         </div>
 
         <div className="extra-settings" style={{ display: 'none' }}>
@@ -293,13 +292,7 @@ const Home = () => {
           )}
         </div>
         </div>
-        <div className="generate-ai-image" style={{ display: 'none' }}>
-          <div className="form-group">
-            <label>Write Prompt</label>
-            <textarea  placeholder="Search Images"   value={prompt} onChange={(e) => setPrompt(e.target.value)}/>
-            <button type="button"  onClick={handleGenerate}>Generate</button>
-          </div>
-        </div>
+      
         <div className="image-input-group">
           <div className="image-input">
             <label>Frame Image:</label>
