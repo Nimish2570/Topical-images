@@ -16,10 +16,11 @@ import numpy as np
 import re
 import textwrap
 import cv2 
+import pillow_avif
 
 
 # Create your views here.
-
+  
 class ProfileRetrieveView(generics.RetrieveAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
@@ -274,6 +275,19 @@ def overlay_images(background_img, logo_img, frame_img, title, text_list):
     return final_img.convert('RGB')
 
 
+
+
+
+def convert_to_avif(input_file):
+    img = Image.open(input_file)
+    if img.mode != 'RGB':
+        print("Converting image to RGB mode...")
+        img = img
+    print("Converting image to AVIF format...")
+
+    img.save(input_file.replace('.png', '.avif').replace('.PNG', '.AVIF'), format='AVIF')
+
+
 @csrf_exempt
 def generateImage(request):
     if request.method == 'POST':
@@ -300,9 +314,15 @@ def generateImage(request):
         # Return the URL of the uploaded image
         output_image_url = request.build_absolute_uri(os.path.join(settings.MEDIA_URL, 'uploaded_images', "output_image.jpg"))
 
+        
+        
+        # convert to avif
+        
+        convert_to_avif(output_image_path)
         # Encode image data to base64 string
         with open(output_image_path, 'rb') as image_file:
             output_image_data = base64.b64encode(image_file.read()).decode('utf-8')
+                
 
         current_output_path = "output_image.avif"
 

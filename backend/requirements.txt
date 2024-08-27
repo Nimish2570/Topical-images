@@ -12,3 +12,4 @@ pillow
 numpy
 opencv-python-headless
 gunicorn
+pillow-avif-plugin
