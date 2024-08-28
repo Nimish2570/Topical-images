@@ -127,15 +127,15 @@ def create_centered_text_image(text_list, base_image):
 def overlay_images(background_img, logo_img, frame_img, title, text_list):
     # Open and resize images using PIL
     width, height = Image.open(background_img).size
-    background = Image.open(background_img).resize((1640, 820)).convert('RGBA')
+    background = Image.open(background_img).resize((1640, 840)).convert('RGBA')
    
     logo_provided = bool(logo_img)
     
     # Load or create frame and logo images
     if frame_img:
-        frame = Image.open(frame_img).resize((1640, 820)).convert('RGBA')
+        frame = Image.open(frame_img).resize((1640, 840)).convert('RGBA')
     else:
-        frame = Image.new('RGBA', (1640, 820), (255, 255, 255, 0))  # Transparent if not provided
+        frame = Image.new('RGBA', (1640, 840), (255, 255, 255, 0))  # Transparent if not provided
 
     if logo_img:
         logo = Image.open(logo_img).convert('RGBA')
@@ -144,8 +144,8 @@ def overlay_images(background_img, logo_img, frame_img, title, text_list):
     
     logo_width, logo_height = logo.size
 
-    # Create a blank image of 1640x820
-    combined_img = Image.new('RGBA', (1640, 820), (255, 255, 255, 0))
+    # Create a blank image of 1640x840
+    combined_img = Image.new('RGBA', (1640, 840), (255, 255, 255, 0))
 
     # Blur and paste the background
     blurred_background = background.filter(ImageFilter.GaussianBlur(10))
@@ -154,7 +154,7 @@ def overlay_images(background_img, logo_img, frame_img, title, text_list):
     # Resize background image without stretching
     background_aspect_ratio = width / height  
     
-    new_height = 580
+    new_height = 600
     new_width = int(new_height * background_aspect_ratio)
 
     background_resized = background.resize((new_width, new_height))
@@ -215,7 +215,7 @@ def overlay_images(background_img, logo_img, frame_img, title, text_list):
     # Set color and image dimensions
     title_color = (255, 255, 255)
     image_width = 1640
-    image_height = 820
+    image_height = 840
 
     # Line spacing
     line_spacing = 20
